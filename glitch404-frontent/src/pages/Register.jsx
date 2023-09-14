@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaUser } from "react-icons/fa";
 import { reset, register } from "../features/auth/authSlice";
+import { emailValidationError } from "../utils/emailValidationError";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,9 +12,10 @@ function Register() {
     email: "",
     password: "",
     password2: "",
+    errMessage: "",
   });
 
-  const { name, email, password, password2 } = formData;
+  const { name, email, password, password2, errMessage } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -78,6 +80,11 @@ function Register() {
           </div>
 
           <div className="form-group">
+            {errMessage.length > 0 && (
+              <div className="text-red-500 text-xs my-0 text-start">
+                *{errMessage}
+              </div>
+            )}
             <input
               type="email"
               className="form-control"
@@ -86,6 +93,12 @@ function Register() {
               value={email}
               placeholder="Enter your email"
               onChange={handleChange}
+              onBlur={() =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  errMessage: emailValidationError(email),
+                }))
+              }
             />
           </div>
           <div className="form-group">

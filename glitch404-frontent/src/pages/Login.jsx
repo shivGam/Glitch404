@@ -5,14 +5,16 @@ import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import GLogin from "../assets/Google.svg";
 import axios from "axios";
+import { emailValidationError } from "../utils/emailValidationError";
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    errMessage: "",
   });
 
-  const { email, password } = formData;
+  const { email, password, errMessage } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = { email, password };
-    dispatch(login(userData));
+    if (errMessage === "") dispatch(login(userData));
   };
 
   if (isLoading) {
@@ -69,6 +71,11 @@ function Login() {
       <section className="form">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
+            {errMessage.length > 0 && (
+              <div className="text-red-500 text-xs my-0 text-start">
+                *{errMessage}
+              </div>
+            )}
             <input
               type="text"
               className="form-control"
@@ -77,8 +84,15 @@ function Login() {
               value={email}
               placeholder="Enter your email"
               onChange={handleChange}
+              onBlur={() =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  errMessage: emailValidationError(email),
+                }))
+              }
             />
           </div>
+
           <div className="form-group">
             <input
               type="password"
