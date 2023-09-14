@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import { API_URL } from "../utils/constants";
 
 const InterMediatoryAuth = () => {
   const queryParameters = new URLSearchParams(window.location.search);
@@ -25,7 +26,7 @@ const InterMediatoryAuth = () => {
   useEffect(() => {
     async function fetchAccessToken() {
       const response = await axios.post(
-        "http://localhost:5000/api/users/getGoogleAuthCode",
+        API_URL + "/api/users/getGoogleAuthCode",
         { code }
       );
       return response.data;

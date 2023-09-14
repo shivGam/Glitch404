@@ -6,6 +6,7 @@ import { login, reset } from "../features/auth/authSlice";
 import GLogin from "../assets/Google.svg";
 import axios from "axios";
 import { emailValidationError } from "../utils/emailValidationError";
+import { API_URL } from "../utils/constants";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -34,9 +35,7 @@ function Login() {
   }, [isError, isSuccess, user, dispatch, navigate]);
 
   const handleGetUrl = async () => {
-    const response = await axios.get(
-      "http://localhost:5000/api/users/getGoogleOAUthUrl"
-    );
+    const response = await axios.get(API_URL + "/api/users/getGoogleOAUthUrl");
     window.location.assign(response.data);
   };
 
